@@ -79,7 +79,7 @@ try {
 
 // Helper function for status updates
 function logStatus(msg1, msg2 = "") {
-  console.log(msg1, msg2);
+  // console.log(msg1, msg2);
   status1El.textContent = `Status: ${msg1}`;
   status2El.textContent = msg2;
 }
