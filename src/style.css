@@ -38,3 +38,9 @@ p {
   margin: 5px 0;
   font-size: 0.9em;
 }
+.status {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
+  justify-content: space-between;
+}

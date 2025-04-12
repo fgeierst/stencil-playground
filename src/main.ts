@@ -6,8 +6,13 @@ const iframeEl = document.getElementById(
   "preview-iframe"
 )! as HTMLIFrameElement;
 const terminalEl = document.getElementById("terminal")!;
-const status1El = document.querySelector("#controls p:nth-of-type(1)")!;
-const status2El = document.querySelector("#controls p:nth-of-type(2)")!;
+const status1El = document.querySelector("#status1")!;
+const status2El = document.querySelector("#status2")!;
+const reloadButton = document.getElementById("reload-button")!;
+
+reloadButton.addEventListener("click", () => {
+  iframeEl.src = iframeEl.src;
+});
 
 async function main() {
   logStatus("Loading WebContainer...");
