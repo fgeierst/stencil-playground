@@ -1,0 +1,40 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui;
+  display: flex;
+  flex-direction: column;
+}
+#controls {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
+}
+#preview-iframe {
+  flex-grow: 1;
+  border: none;
+  min-height: 400px;
+}
+#terminal {
+  flex-shrink: 0;
+  height: 250px;
+  overflow-y: scroll;
+  background-color: #222;
+  color: #eee;
+  font-family: monospace;
+  font-size: 0.8em;
+  padding: 5px;
+  white-space: pre-wrap;
+  border-top: 1px solid #ccc;
+}
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+}
+p {
+  margin: 5px 0;
+  font-size: 0.9em;
+}
