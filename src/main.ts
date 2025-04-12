@@ -34,13 +34,12 @@ async function main() {
       console.error("WebContainer Error:", message);
     });
 
-    // --- Run npm install ---
+    //Run pnpm install
     logStatus("Running pnpm install...", "(this may take a moment)");
     const installProcess = await webcontainerInstance.spawn("pnpm", [
       "install",
     ]);
 
-    // Pipe output to terminal
     installProcess.output.pipeTo(
       new WritableStream({
         write(data) {
@@ -56,8 +55,22 @@ async function main() {
     }
     logStatus("pnpm install complete.");
 
-    // --- Run npm start ---
-    logStatus("Starting dev server (npm start)...");
+    // List installed packages
+    logTerminal("\n\n$ ls ./node_modules/.pnpm/\n");
+    const ls = await webcontainerInstance.spawn("ls", [
+      "./node_modules/.pnpm/",
+    ]);
+    ls.output.pipeTo(
+      new WritableStream({
+        write(data) {
+          logTerminal(data);
+        },
+      })
+    );
+    await ls.exit;
+
+    // Run pnpm start
+    logStatus("Starting dev server (pnpm start)...");
     logTerminal("\n\n$ pnpm start^\n");
     const startProcess = await webcontainerInstance.spawn("pnpm", [
       "start",
@@ -65,7 +78,6 @@ async function main() {
       "--no-open",
     ]);
 
-    // Pipe output to terminal
     startProcess.output.pipeTo(
       new WritableStream({
         write(data) {

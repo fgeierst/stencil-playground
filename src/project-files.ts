@@ -8,10 +8,7 @@ export const projectFiles = {
           private: true,
           type: "module",
           dependencies: {
-            "@stencil/core": "latest",
-          },
-          optionalDependencies: {
-            "@rollup/rollup-linux-x64-musl": "4.34.9",
+            "@stencil/core": "4.25.0",
           },
           scripts: {
             build: "stencil build",
@@ -31,7 +28,7 @@ export const config: Config = {
   namespace: 'myplayground',
   outputTargets: [
     { type: 'dist', esmLoaderPath: '../loader' },
-    { type: 'www', serviceWorker: null }
+    { type: 'www', serviceWorker: null, },
   ],
 };`,
     },
@@ -69,19 +66,17 @@ export const config: Config = {
 <html dir="ltr" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-  <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
-  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
   <title>Stencil Dev Server</title>
   <script type="module" src="/build/myplayground.esm.js"></script>
   <script nomodule src="/build/myplayground.js"></script>
   <style> body { padding: 20px; font-family: sans-serif; background-color: #f9f9f9; } </style>
 </head>
-<body><h1>Stencil Component Test (@webcontainer/api)</h1><my-greeting name="WebContainer User"></my-greeting><my-greeting></my-greeting></body></html>`,
+<body><h1>Stencil Component Test</h1><my-greeting name="WebContainer User"></my-greeting><my-greeting></my-greeting></body></html>`,
         },
       },
       "index.ts": {
         file: {
-          contents: `export * from './components';`,
+          contents: `export type * from './components.d.ts';`,
         },
       },
       components: {
