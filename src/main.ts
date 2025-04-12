@@ -23,8 +23,9 @@ async function main() {
     logStatus("Files Mounted.");
 
     // Listener for server readiness
-    webcontainerInstance.on("server-ready", (port, url) => {
+    webcontainerInstance.on("server-ready", async (port, url) => {
       logStatus(`Server ready on port ${port}`, `Preview loaded.`);
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait for a moment
       iframeEl.src = url; // Update iframe source
     });
 
@@ -85,6 +86,20 @@ async function main() {
         },
       })
     );
+
+    await startProcess.exit;
+
+    // List www
+    logTerminal("\n\n$ ls ./www/\n");
+    const ls2 = await webcontainerInstance.spawn("ls", ["./www/"]);
+    ls2.output.pipeTo(
+      new WritableStream({
+        write(data) {
+          logTerminal(data);
+        },
+      })
+    );
+    await ls2.exit;
   } catch (error: any) {
     logStatus("Error initializing playground:", error.message);
     console.error("Initialization Error:", error);
