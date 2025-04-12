@@ -19,11 +19,13 @@
         <button id="reload-button">Reload</button>
       </div>
     </div>
-    <iframe
-      id="preview-iframe"
-      src="about:blank"
-      title="WebContainer Preview"
-    ></iframe>
+    <main>
+      <div id="editor">
+        <textarea id="code-editor"></textarea>
+        <button type="submit" id="save-button">Save</button>
+      </div>
+      <iframe id="preview-iframe" src="about:blank" title="Preview"></iframe>
+    </main>
     <pre id="terminal">Starting WebContainer logs...</pre>
   </body>
 </html>

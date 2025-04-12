@@ -9,14 +9,42 @@ const terminalEl = document.getElementById("terminal")!;
 const status1El = document.querySelector("#status1")!;
 const status2El = document.querySelector("#status2")!;
 const reloadButton = document.getElementById("reload-button")!;
+const saveButton = document.getElementById("save-button")!;
+let webcontainerInstance: WebContainer | null = null;
 
 reloadButton.addEventListener("click", () => {
   iframeEl.src = iframeEl.src;
 });
 
+saveButton.addEventListener("click", async () => {
+  const codeEditor = document.getElementById(
+    "code-editor"
+  ) as HTMLTextAreaElement;
+  if (codeEditor && webcontainerInstance) {
+    const updatedContent = codeEditor.value;
+    await webcontainerInstance.fs.writeFile(
+      "src/components/my-greeting/my-greeting.tsx",
+      updatedContent
+    );
+    logStatus("Component file updated in container.");
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const codeEditor = document.getElementById(
+    "code-editor"
+  ) as HTMLTextAreaElement;
+  if (codeEditor) {
+    const myGreetingContent =
+      projectFiles.src.directory.components.directory["my-greeting"].directory[
+        "my-greeting.tsx"
+      ].file.contents;
+    codeEditor.value = myGreetingContent;
+  }
+});
+
 async function main() {
   logStatus("Loading WebContainer...");
-  let webcontainerInstance;
 
   try {
     logStatus("Booting WebContainer...");
