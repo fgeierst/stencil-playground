@@ -1,5 +1,5 @@
 import { WebContainer } from "@webcontainer/api";
-import { projectFiles } from "./projectFiles";
+import { projectFiles } from "./project-files";
 import "./style.css";
 
 const iframeEl = document.getElementById(

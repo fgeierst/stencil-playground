@@ -11,12 +11,7 @@ export const projectFiles = {
             "@stencil/core": "latest",
           },
           optionalDependencies: {
-            "@rollup/rollup-linux-x64-musl": "latest",
-          },
-          pnpm: {
-            overrides: {
-              "@rollup/rollup-linux-x64-musl": "npm:@rollup/plugin-wasm",
-            },
+            "@rollup/rollup-linux-x64-musl": "4.34.9",
           },
           scripts: {
             build: "stencil build",
