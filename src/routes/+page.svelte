@@ -3,36 +3,40 @@
 	import StatusBar from './Status.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainer } from '@webcontainer/api';
+	import { getWebContainer } from '$lib/webcontainer';
 
+	let wc: WebContainer | undefined;
 	let status = $state('');
 	let code = $state(
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
 	);
-	let wc: WebContainer | undefined;
+	let iframeSrc = $state('about:blank');
 
 	const handleSave = async () => {
 		if (wc) {
 			await wc.fs.writeFile('src/components/my-greeting/my-greeting.tsx', code);
+			reloadIframe();
 			status = 'Component file updated in container.';
 		}
 	};
 
-	onMount(() => {
-		const iframeEl = document.getElementById('preview-iframe')! as HTMLIFrameElement;
-		const terminalEl = document.getElementById('terminal')!;
-		const reloadButton = document.getElementById('reload-button')!;
+	const reloadIframe = async () => {
+		await new Promise((resolve) => setTimeout(resolve, 500));
+		const url = new URL(iframeSrc);
+		url.searchParams.set('t', Date.now().toString());
+		iframeSrc = url.toString();
+	};
 
-		reloadButton.addEventListener('click', () => {
-			iframeEl.src = iframeEl.src;
-		});
+	onMount(() => {
+		const terminalEl = document.getElementById('terminal')!;
 
 		async function main() {
 			status = 'Loading WebContainer...';
 
 			try {
 				status = 'Booting WebContainer...';
-				wc = await WebContainer.boot();
+				wc = await getWebContainer();
 				status = 'WebContainer Booted.';
 
 				status = 'Mounting project files...';
@@ -43,7 +47,7 @@
 				wc.on('server-ready', async (port, url) => {
 					status = `Server ready on port ${port}. Preview loaded.`;
 					await new Promise((resolve) => setTimeout(resolve, 3000)); // The stencil dev server is up before the compiled files are written
-					iframeEl.src = url;
+					iframeSrc = url;
 				});
 
 				// Listener for container errors
@@ -140,7 +144,7 @@
 	<h1>StencilJS Playground</h1>
 	<div class="status">
 		<StatusBar {status}></StatusBar>
-		<button id="reload-button">Reload</button>
+		<button id="reload-button" onclick={reloadIframe}>Reload</button>
 	</div>
 </div>
 <main>
@@ -148,7 +152,7 @@
 		<textarea id="code-editor" bind:value={code}></textarea>
 		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
 	</div>
-	<iframe id="preview-iframe" src="about:blank" title="Preview"></iframe>
+	<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
 </main>
 <pre id="terminal">Starting WebContainer logs...</pre>
 

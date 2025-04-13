@@ -1,3 +1,10 @@
 import { WebContainer } from '@webcontainer/api';
 
-export const wc = await WebContainer.boot();
+let webContainerInstance: WebContainer | null = null;
+
+export async function getWebContainer(): Promise<WebContainer> {
+	if (!webContainerInstance) {
+		webContainerInstance = await WebContainer.boot();
+	}
+	return webContainerInstance;
+}
