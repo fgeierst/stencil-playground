@@ -212,10 +212,12 @@
 	main {
 		height: 100%;
 	}
+
 	#editor {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		height: 100%;
 	}
 
 	textarea {

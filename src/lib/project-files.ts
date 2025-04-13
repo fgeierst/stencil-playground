@@ -77,7 +77,7 @@ export const config: Config = {
   <script nomodule src="/build/myplayground.js"></script>
   <style> body { padding: 20px; font-family: sans-serif; background-color: #f9f9f9; } </style>
 </head>
-<body><h1>Stencil Component Test</h1><my-greeting name="WebContainer User"></my-greeting><my-greeting></my-greeting></body></html>`
+<body><h1>Stencil Component Test</h1><my-greeting name="WebContainer"></my-greeting><my-greeting></my-greeting></body></html>`
 				}
 			},
 			'index.ts': {
@@ -100,7 +100,7 @@ export const config: Config = {
 @Component({ tag: 'my-greeting', styleUrl: 'my-greeting.css', shadow: true })
 export class MyGreeting {
   @Prop() name: string = 'World';
-  render() { return (<div>Hello, {this.name}! From @webcontainer/api.</div>); }
+  render() { return (<div>Hello, {this.name}!</div>); }
 }`
 								}
 							},
