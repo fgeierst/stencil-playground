@@ -9,6 +9,9 @@ const dirname =
 
 export default defineConfig({
 	plugins: [sveltekit() as PluginOption],
+	server: {
+		port: 4173
+	},
 	css: {
 		transformer: 'lightningcss'
 	},
