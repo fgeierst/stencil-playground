@@ -1,72 +1,60 @@
 <script lang="ts">
-	import { WebContainer } from '@webcontainer/api';
-	import { projectFiles } from '$lib/project-files';
 	import { onMount } from 'svelte';
+	import StatusBar from './Status.svelte';
+	import { projectFiles } from '$lib/project-files';
+	import { WebContainer } from '@webcontainer/api';
+
+	let status = $state('');
+	let code = $state(
+		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
+			.contents
+	);
+	let wc: WebContainer | undefined;
+
+	const handleSave = async () => {
+		if (wc) {
+			await wc.fs.writeFile('src/components/my-greeting/my-greeting.tsx', code);
+			status = 'Component file updated in container.';
+		}
+	};
 
 	onMount(() => {
 		const iframeEl = document.getElementById('preview-iframe')! as HTMLIFrameElement;
 		const terminalEl = document.getElementById('terminal')!;
-		const status1El = document.querySelector('#status1')!;
-		const status2El = document.querySelector('#status2')!;
 		const reloadButton = document.getElementById('reload-button')!;
-		const saveButton = document.getElementById('save-button')!;
-		let webcontainerInstance: WebContainer | null = null;
 
 		reloadButton.addEventListener('click', () => {
 			iframeEl.src = iframeEl.src;
 		});
 
-		saveButton.addEventListener('click', async () => {
-			const codeEditor = document.getElementById('code-editor') as HTMLTextAreaElement;
-			if (codeEditor && webcontainerInstance) {
-				const updatedContent = codeEditor.value;
-				await webcontainerInstance.fs.writeFile(
-					'src/components/my-greeting/my-greeting.tsx',
-					updatedContent
-				);
-				logStatus('Component file updated in container.');
-			}
-		});
-
-		document.addEventListener('DOMContentLoaded', () => {
-			const codeEditor = document.getElementById('code-editor') as HTMLTextAreaElement;
-			if (codeEditor) {
-				const myGreetingContent =
-					projectFiles.src.directory.components.directory['my-greeting'].directory[
-						'my-greeting.tsx'
-					].file.contents;
-				codeEditor.value = myGreetingContent;
-			}
-		});
-
 		async function main() {
-			logStatus('Loading WebContainer...');
+			status = 'Loading WebContainer...';
 
 			try {
-				logStatus('Booting WebContainer...');
-				webcontainerInstance = await WebContainer.boot();
-				logStatus('WebContainer Booted.');
+				status = 'Booting WebContainer...';
+				wc = await WebContainer.boot();
+				status = 'WebContainer Booted.';
 
-				logStatus('Mounting project files...');
-				await webcontainerInstance.mount(projectFiles);
-				logStatus('Files Mounted.');
+				status = 'Mounting project files...';
+				await wc.mount(projectFiles);
+				status = 'Files Mounted.';
 
 				// Listener for server readiness
-				webcontainerInstance.on('server-ready', async (port, url) => {
-					logStatus(`Server ready on port ${port}`, `Preview loaded.`);
-					await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait for a moment
-					iframeEl.src = url; // Update iframe source
+				wc.on('server-ready', async (port, url) => {
+					status = `Server ready on port ${port}. Preview loaded.`;
+					await new Promise((resolve) => setTimeout(resolve, 3000)); // The stencil dev server is up before the compiled files are written
+					iframeEl.src = url;
 				});
 
 				// Listener for container errors
-				webcontainerInstance.on('error', ({ message }) => {
-					logStatus('WebContainer Error:', message);
+				wc.on('error', ({ message }) => {
+					status = `WebContainer Error: ${message}`;
 					console.error('WebContainer Error:', message);
 				});
 
 				//Run pnpm install
-				logStatus('Running pnpm install...', '(this may take a moment)');
-				const installProcess = await webcontainerInstance.spawn('pnpm', ['install']);
+				status = 'Running pnpm install... (this may take a moment)';
+				const installProcess = await wc.spawn('pnpm', ['install']);
 
 				installProcess.output.pipeTo(
 					new WritableStream({
@@ -81,11 +69,11 @@
 				if (installExitCode !== 0) {
 					throw new Error(`pnpm install failed with exit code ${installExitCode}`);
 				}
-				logStatus('pnpm install complete.');
+				status = 'pnpm install complete.';
 
 				// List installed packages
 				logTerminal('\n\n$ ls ./node_modules/.pnpm/\n');
-				const ls = await webcontainerInstance.spawn('ls', ['./node_modules/.pnpm/']);
+				const ls = await wc.spawn('ls', ['./node_modules/.pnpm/']);
 				ls.output.pipeTo(
 					new WritableStream({
 						write(data) {
@@ -96,9 +84,9 @@
 				await ls.exit;
 
 				// Run pnpm start
-				logStatus('Starting dev server (pnpm start)...');
+				status = 'Starting dev server (pnpm start)...';
 				logTerminal('\n\n$ pnpm start^\n');
-				const startProcess = await webcontainerInstance.spawn('pnpm', ['start', '--', '--no-open']);
+				const startProcess = await wc.spawn('pnpm', ['start', '--', '--no-open']);
 
 				startProcess.output.pipeTo(
 					new WritableStream({
@@ -112,7 +100,7 @@
 
 				// List www
 				logTerminal('\n\n$ ls ./www/\n');
-				const ls2 = await webcontainerInstance.spawn('ls', ['./www/']);
+				const ls2 = await wc.spawn('ls', ['./www/']);
 				ls2.output.pipeTo(
 					new WritableStream({
 						write(data) {
@@ -122,26 +110,19 @@
 				);
 				await ls2.exit;
 			} catch (error: unknown) {
+				console.error('Initialization Error:', error);
 				if (error instanceof Error) {
-					logStatus('Error initializing playground:', error.message);
-					console.error('Initialization Error:', error);
+					status = `Error initializing playground: ${error.message}`;
 				} else {
-					logStatus('Error initializing playground:', 'Unknown error');
-					console.error('Initialization Error:', error);
+					status = `Error initializing playground.`;
 				}
-				if (webcontainerInstance) {
+				if (wc) {
 					// Optional: Attempt to tear down the instance on error
 				}
 			}
 		}
 
 		main();
-
-		function logStatus(msg1: string, msg2 = '') {
-			// console.log(msg1, msg2);
-			status1El.textContent = `Status: ${msg1}`;
-			status2El.textContent = msg2;
-		}
 
 		function logTerminal(data: string) {
 			terminalEl.textContent += data;
@@ -158,17 +139,14 @@
 <div id="controls">
 	<h1>StencilJS Playground</h1>
 	<div class="status">
-		<div>
-			<div id="status1">Status: Initializing...</div>
-			<div id="status2">&nbsp;</div>
-		</div>
+		<StatusBar {status}></StatusBar>
 		<button id="reload-button">Reload</button>
 	</div>
 </div>
 <main>
 	<div id="editor">
-		<textarea id="code-editor"></textarea>
-		<button type="submit" id="save-button">Save</button>
+		<textarea id="code-editor" bind:value={code}></textarea>
+		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
 	</div>
 	<iframe id="preview-iframe" src="about:blank" title="Preview"></iframe>
 </main>

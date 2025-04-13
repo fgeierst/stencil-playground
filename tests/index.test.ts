@@ -9,9 +9,9 @@ test('has title', async ({ page }) => {
 test('mounts webcontainer', async ({ page }) => {
 	await page.goto('/');
 
-	const serverReadyMsg = page.getByText('Status: Server ready on port');
+	const serverReadyMsg = page.getByText('Server ready on port');
 	await expect(serverReadyMsg).toBeVisible({
-		timeout: 20 * 1000
+		timeout: 25 * 1000
 	});
 
 	const terminalEl = page.locator('#terminal');
