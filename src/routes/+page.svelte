@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import StatusBar from './Status.svelte';
+	import Splitter from '$lib/components/Splitter.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainer } from '@webcontainer/api';
 	import { getWebContainer } from '$lib/webcontainer';
@@ -147,14 +148,26 @@
 		<button id="reload-button" onclick={reloadIframe}>Reload</button>
 	</div>
 </div>
-<main>
-	<div id="editor">
-		<textarea id="code-editor" bind:value={code}></textarea>
-		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
-	</div>
-	<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
-</main>
-<pre id="terminal">Starting WebContainer logs...</pre>
+<Splitter orientation="vertical" defaultSize={[80, 20]}>
+	{#snippet first()}
+		<main>
+			<Splitter>
+				{#snippet first()}
+					<div id="editor">
+						<textarea id="code-editor" bind:value={code}></textarea>
+						<button type="submit" id="save-button" onclick={handleSave}>Save</button>
+					</div>
+				{/snippet}
+				{#snippet second()}
+					<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
+				{/snippet}
+			</Splitter>
+		</main>
+	{/snippet}
+	{#snippet second()}
+		<pre id="terminal">Starting WebContainer logs...</pre>
+	{/snippet}
+</Splitter>
 
 <style>
 	#controls {
@@ -173,7 +186,7 @@
 	}
 	#terminal {
 		flex-shrink: 0;
-		height: 250px;
+		height: 100%;
 		overflow-y: scroll;
 		background-color: #222;
 		color: #eee;
@@ -197,14 +210,7 @@
 	}
 
 	main {
-		flex-grow: 1;
-		display: grid;
-		grid-auto-flow: row;
-		gap: 10px;
-
-		@media (min-width: 500px) {
-			grid-template-columns: 1fr 1fr;
-		}
+		height: 100%;
 	}
 	#editor {
 		display: flex;

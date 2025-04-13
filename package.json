@@ -19,7 +19,9 @@
 		"build-storybook": "storybook build"
 	},
 	"dependencies": {
-		"@webcontainer/api": "^1.5.3"
+		"@webcontainer/api": "^1.5.3",
+		"@zag-js/splitter": "^1.9.3",
+		"@zag-js/svelte": "^1.9.3"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^3",
