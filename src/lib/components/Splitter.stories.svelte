@@ -34,11 +34,3 @@
 		{/snippet}
 	</Splitter>
 {/snippet}
-
-<style>
-	:global(body),
-	:global(html),
-	:global(#storybook-root) {
-		height: 100%;
-	}
-</style>

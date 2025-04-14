@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Editor from '../lib/components/Editor.svelte';
+
 	import { onMount } from 'svelte';
 	import StatusBar from '../lib/components/Status.svelte';
 	import Terminal from '../lib/components/Terminal.svelte';
@@ -44,15 +46,13 @@
 	<h1>StencilJS Playground</h1>
 	<div class="status">
 		<StatusBar {status}></StatusBar>
+		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
 		<button id="reload-button" onclick={() => handleReloadPreview()}>Reload</button>
 	</div>
 </div>
 <Splitter>
 	{#snippet first()}
-		<div id="editor">
-			<textarea id="code-editor" bind:value={code}></textarea>
-			<button type="submit" id="save-button" onclick={handleSave}>Save</button>
-		</div>
+		<Editor {code}></Editor>
 	{/snippet}
 	{#snippet second()}
 		<main>
@@ -83,19 +83,7 @@
 		height: 100%;
 		border-width: 0;
 	}
-	#terminal {
-		flex-shrink: 0;
-		height: 100%;
-		overflow-y: scroll;
-		background-color: #222;
-		color: #eee;
-		font-family: monospace;
-		font-size: 0.8em;
-		padding: 5px;
-		white-space: pre-wrap;
-		border-top: 1px solid #ccc;
-		margin: 0;
-	}
+
 	h1 {
 		margin: 0 0 10px 0;
 		font-size: 1.2em;
@@ -112,16 +100,7 @@
 		height: 100%;
 	}
 
-	#editor {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-		height: 100%;
-	}
-
-	textarea {
-		flex-grow: 1;
-		padding: 1rem;
-		border-width: 0;
+	#save-button {
+		margin-inline-start: auto;
 	}
 </style>
