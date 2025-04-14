@@ -36,6 +36,7 @@
 	};
 	const handleTerminalData = (data: string) => (terminalData += data);
 	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
+	const handleEditEvent = (newCode: string) => (code = newCode);
 </script>
 
 <svelte:head>
@@ -52,7 +53,7 @@
 </div>
 <Splitter>
 	{#snippet first()}
-		<Editor {code}></Editor>
+		<Editor {code} editEvent={handleEditEvent}></Editor>
 	{/snippet}
 	{#snippet second()}
 		<main>

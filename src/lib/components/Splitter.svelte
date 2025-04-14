@@ -37,13 +37,30 @@
 <style>
 	.trigger {
 		width: 10px;
-		/* background-color: rgba(0, 0, 0, 0.01); */
 		cursor: ew-resize;
 		position: relative;
-		--width: 4px;
-		--height: 40px;
+		--width: 3px;
+		--height: 30px;
 
-		&:before {
+		&::before {
+			display: block;
+			content: '';
+			position: absolute;
+			inset: 0 50%;
+			transform: translateX(-50%);
+			width: 1px;
+			background-color: rgba(0, 0, 0, 0.1);
+			transition:
+				background-color 0.2s ease,
+				width 0.2s ease,
+				height 0.2s ease;
+		}
+		&:hover::before {
+			background-color: rgb(15, 87, 159);
+			width: 2px;
+		}
+
+		/* &:after {
 			display: block;
 			content: '';
 			position: absolute;
@@ -53,8 +70,8 @@
 			width: var(--width);
 			height: var(--height);
 			border-radius: 2px;
-			background-color: #666;
-		}
+			background-color: rgba(0, 0, 0, 0.5);
+		} */
 
 		&[data-orientation='vertical'] {
 			cursor: ns-resize;
@@ -62,9 +79,21 @@
 			height: 10px;
 		}
 
-		&[data-orientation='vertical']::before {
+		/* &[data-orientation='vertical']::after {
 			width: var(--height);
 			height: var(--width);
+		} */
+
+		&[data-orientation='vertical']::before {
+			height: 1px;
+			width: 100%;
+			inset: 50% 0;
+			transform: translateY(-50%);
+		}
+		&[data-orientation='vertical']:hover::before {
+			background-color: rgb(15, 87, 159);
+			width: 100%;
+			height: 2px;
 		}
 	}
 </style>

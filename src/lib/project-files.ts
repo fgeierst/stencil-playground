@@ -76,9 +76,9 @@ export const config: Config = {
   <title>Stencil Dev Server</title>
   <script type="module" src="/build/myplayground.esm.js"></script>
   <script nomodule src="/build/myplayground.js"></script>
-  <style> body { padding: 20px; font-family: sans-serif; background-color: #f9f9f9; } </style>
+  <style> body { padding: 1rem; font-family: system-ui; } </style>
 </head>
-<body><h1>Stencil Component Test</h1><my-greeting name="WebContainer"></my-greeting><my-greeting></my-greeting></body></html>`
+<body><my-greeting name="WebContainer"></my-greeting><my-greeting></my-greeting></body></html>`
 				}
 			},
 			'index.ts': {
@@ -107,7 +107,7 @@ export class MyGreeting {
 							},
 							'my-greeting.css': {
 								file: {
-									contents: `:host { display: block; border: 2px dashed green; padding: 15px; margin: 10px; font-family: sans-serif; color: #111; background-color: #efe; }
+									contents: `:host { display: block; border: 2px dashed green; margin-block-end: 1rem; padding: .5em; color: #111; background-color: #efe; }
 div { font-weight: bold; }`
 								}
 							}

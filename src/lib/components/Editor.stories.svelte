@@ -6,6 +6,9 @@
 	const { Story } = defineMeta({
 		component: Editor,
 		args: {
+			editEvent: (code: string) => {
+				console.log('Code changed:', code);
+			},
 			code: projectFiles.src.directory.components.directory['my-greeting'].directory[
 				'my-greeting.tsx'
 			].file.contents
