@@ -11,8 +11,10 @@
 	});
 </script>
 
-<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-<pre bind:this={preEl}>{@html fancyAnsi.toHtml(terminalData)}</pre>
+<section aria-label="Terminal">
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	<pre bind:this={preEl}>{@html fancyAnsi.toHtml(terminalData)}</pre>
+</section>
 
 <style>
 	pre {

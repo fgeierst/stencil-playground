@@ -14,8 +14,8 @@ test('mounts webcontainer', async ({ page }) => {
 		timeout: 25 * 1000
 	});
 
-	const terminalEl = page.locator('#terminal');
-	await expect(terminalEl).toContainText('build finished, watching for changes...');
+	const terminal = page.getByRole('region', { name: 'Terminal' });
+	await expect(terminal).toContainText('build finished, watching for changes...');
 
 	const codeEditor = page.locator('#code-editor');
 	await expect(codeEditor).toBeVisible();
