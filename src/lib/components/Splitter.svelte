@@ -37,13 +37,34 @@
 <style>
 	.trigger {
 		width: 10px;
-		background-color: #ccc;
+		/* background-color: rgba(0, 0, 0, 0.01); */
 		cursor: ew-resize;
+		position: relative;
+		--width: 4px;
+		--height: 40px;
+
+		&:before {
+			display: block;
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: var(--width);
+			height: var(--height);
+			border-radius: 2px;
+			background-color: #666;
+		}
 
 		&[data-orientation='vertical'] {
 			cursor: ns-resize;
 			width: 100%;
 			height: 10px;
+		}
+
+		&[data-orientation='vertical']::before {
+			width: var(--height);
+			height: var(--width);
 		}
 	}
 </style>

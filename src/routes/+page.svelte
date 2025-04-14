@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import StatusBar from './Status.svelte';
+	import StatusBar from '../lib/components/Status.svelte';
+	import Terminal from '../lib/components/Terminal.svelte';
 	import Splitter from '$lib/components/Splitter.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainerService } from '$lib/webcontainer';
@@ -46,24 +47,24 @@
 		<button id="reload-button" onclick={() => handleReloadPreview()}>Reload</button>
 	</div>
 </div>
-<Splitter orientation="vertical" defaultSize={[80, 20]}>
+<Splitter>
 	{#snippet first()}
+		<div id="editor">
+			<textarea id="code-editor" bind:value={code}></textarea>
+			<button type="submit" id="save-button" onclick={handleSave}>Save</button>
+		</div>
+	{/snippet}
+	{#snippet second()}
 		<main>
-			<Splitter>
+			<Splitter orientation="vertical" defaultSize={[80, 20]}>
 				{#snippet first()}
-					<div id="editor">
-						<textarea id="code-editor" bind:value={code}></textarea>
-						<button type="submit" id="save-button" onclick={handleSave}>Save</button>
-					</div>
+					<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
 				{/snippet}
 				{#snippet second()}
-					<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
+					<Terminal {terminalData}></Terminal>
 				{/snippet}
 			</Splitter>
 		</main>
-	{/snippet}
-	{#snippet second()}
-		<pre id="terminal">{terminalData}</pre>
 	{/snippet}
 </Splitter>
 
