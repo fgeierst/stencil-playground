@@ -23,6 +23,7 @@ export class WebContainerService {
 		try {
 			// 1. Boot
 			this.statusListener('Booting WebContainer...');
+			this.terminalListener('Booting WebContainer...\n');
 			this.#wc = await WebContainer.boot();
 
 			// 2. Setup server-ready listener
@@ -40,10 +41,13 @@ export class WebContainerService {
 
 			// 4. Mount
 			this.statusListener('Mounting project files...');
+			this.terminalListener('Mounting project files...\n');
 			await this.#wc.mount(this.files);
 
 			// 5. Install dependencies
 			this.statusListener('Installing dependencies...');
+			this.terminalListener('pnpm install\n');
+
 			const installExitCode = await this.exec('pnpm', ['install']);
 			if (installExitCode !== 0) {
 				throw new Error(`Install failed with exit code ${installExitCode}`);

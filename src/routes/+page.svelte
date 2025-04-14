@@ -44,9 +44,11 @@
 </svelte:head>
 
 <div id="controls">
-	<h1>StencilJS Playground</h1>
-	<div class="status">
-		<StatusBar {status}></StatusBar>
+	<h1>
+		<img src="/favicon.svg" alt="" width="24" height="24" />
+		StencilJS Playground
+	</h1>
+	<div id="actions">
 		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
 		<button id="reload-button" onclick={() => handleReloadPreview()}>Reload</button>
 	</div>
@@ -59,7 +61,12 @@
 		<main>
 			<Splitter orientation="vertical" defaultSize={[80, 20]}>
 				{#snippet first()}
-					<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
+					<section aria-label="Preview" id="preview">
+						<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
+						<div class="status">
+							<StatusBar {status}></StatusBar>
+						</div>
+					</section>
 				{/snippet}
 				{#snippet second()}
 					<Terminal {terminalData}></Terminal>
@@ -72,36 +79,46 @@
 <style>
 	#controls {
 		padding: 10px;
-		background-color: #f0f0f0;
-		border-bottom: 1px solid #ccc;
-		flex-shrink: 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		display: flex;
+		gap: 1rem;
+		align-items: end;
+		justify-content: space-between;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 1.2em;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	#preview {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 
 	#preview-iframe {
-		flex: 1;
 		flex-grow: 1;
 		width: 100%;
 		height: 100%;
 		border-width: 0;
 	}
 
-	h1 {
-		margin: 0 0 10px 0;
-		font-size: 1.2em;
+	.status {
+		flex-shrink: 1;
 	}
 
-	.status {
+	#actions {
 		display: flex;
 		gap: 0.5rem;
-		align-items: end;
-		justify-content: space-between;
+		align-items: center;
+		justify-content: flex-end;
 	}
 
 	main {
 		height: 100%;
-	}
-
-	#save-button {
-		margin-inline-start: auto;
 	}
 </style>
