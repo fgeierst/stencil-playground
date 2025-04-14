@@ -1,5 +1,5 @@
-<script module>
-	import { defineMeta, setTemplate } from '@storybook/addon-svelte-csf';
+<script module lang="ts">
+	import { defineMeta, setTemplate, type Args } from '@storybook/addon-svelte-csf';
 	import Splitter from './Splitter.svelte';
 
 	const { Story } = defineMeta({
@@ -24,7 +24,7 @@
 	}}
 />
 
-{#snippet template(args)}
+{#snippet template(args: Args<typeof Story>)}
 	<Splitter {...args}>
 		{#snippet first()}
 			<div>First pane</div>
