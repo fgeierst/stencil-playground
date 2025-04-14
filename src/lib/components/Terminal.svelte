@@ -17,8 +17,11 @@
 </section>
 
 <style>
-	pre {
+	section {
 		height: 100%;
+		display: grid;
+	}
+	pre {
 		overflow-y: scroll;
 		background-color: #222;
 		color: #eee;
