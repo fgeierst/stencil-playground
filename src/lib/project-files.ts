@@ -1,4 +1,5 @@
-export const projectFiles = {
+import type { FileSystemTree } from '@webcontainer/api';
+export const projectFiles: FileSystemTree = {
 	'package.json': {
 		file: {
 			contents: JSON.stringify(

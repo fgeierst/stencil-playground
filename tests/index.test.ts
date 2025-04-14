@@ -15,7 +15,7 @@ test('mounts webcontainer', async ({ page }) => {
 	});
 
 	const terminalEl = page.locator('#terminal');
-	await expect(terminalEl).toContainText('Starting WebContainer logs...');
+	await expect(terminalEl).toContainText('build finished, watching for changes...');
 
 	const codeEditor = page.locator('#code-editor');
 	await expect(codeEditor).toBeVisible();
@@ -24,6 +24,6 @@ test('mounts webcontainer', async ({ page }) => {
 		.locator('iframe[title="Preview"]')
 		.contentFrame()
 		.locator('my-greeting')
-		.filter({ hasText: 'Hello, WebContainer User!' });
+		.filter({ hasText: 'Hello, WebContainer!' });
 	await expect(mountedWebComponent).toBeVisible();
 });
