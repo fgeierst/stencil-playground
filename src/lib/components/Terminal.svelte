@@ -20,7 +20,8 @@
 
 <style>
 	section {
-		height: 100%;
+		flex-grow: 1;
+		overflow-y: auto;
 		display: grid;
 	}
 	pre {

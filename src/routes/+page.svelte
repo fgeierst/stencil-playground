@@ -60,7 +60,7 @@
 	{/snippet}
 	{#snippet second()}
 		<main>
-			<Splitter orientation="vertical" defaultSize={[80, 20]}>
+			<Splitter orientation="vertical" defaultSize={[80, 20]} collapsibleName="Terminal">
 				{#snippet first()}
 					<section aria-label="Preview" id="preview">
 						<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>

@@ -6,7 +6,8 @@
 		component: Splitter,
 		args: {
 			defaultSize: [50, 50],
-			orientation: 'horizontal'
+			orientation: 'horizontal',
+			collapsibleName: undefined
 		}
 	});
 </script>
@@ -21,6 +22,14 @@
 	name="Vertical"
 	args={{
 		orientation: 'vertical'
+	}}
+/>
+
+<Story
+	name="Collapsible"
+	args={{
+		orientation: 'vertical',
+		collapsibleName: 'My panel'
 	}}
 />
 
