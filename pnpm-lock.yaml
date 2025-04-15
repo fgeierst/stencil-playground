@@ -11,6 +11,12 @@ importers:
       '@codemirror/lang-javascript':
         specifier: ^6.2.3
         version: 6.2.3
+      '@codemirror/state':
+        specifier: ^6.5.2
+        version: 6.5.2
+      '@fsegurai/codemirror-theme-basic-dark':
+        specifier: ^6.1.2
+        version: 6.1.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.36.5)(@lezer/highlight@1.2.1)
       '@webcontainer/api':
         specifier: ^1.5.3
         version: 1.5.3
@@ -427,6 +433,14 @@ packages:
   '@eslint/plugin-kit@0.2.8':
     resolution: {integrity: sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@fsegurai/codemirror-theme-basic-dark@6.1.2':
+    resolution: {integrity: sha512-qWhRTsdBZDJv7HvUJoRxqXoRWGVN7ws41t84ZIXA+FbqRZMlgO2iR6FBbuVFkWQRS1OitdKV2m7fKq9TSU0Z/g==}
+    peerDependencies:
+      '@codemirror/language': ^6.0.0
+      '@codemirror/state': ^6.0.0
+      '@codemirror/view': ^6.0.0
+      '@lezer/highlight': ^1.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2935,6 +2949,13 @@ snapshots:
     dependencies:
       '@eslint/core': 0.13.0
       levn: 0.4.1
+
+  '@fsegurai/codemirror-theme-basic-dark@6.1.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.36.5)(@lezer/highlight@1.2.1)':
+    dependencies:
+      '@codemirror/language': 6.11.0
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.36.5
+      '@lezer/highlight': 1.2.1
 
   '@humanfs/core@0.19.1': {}
 

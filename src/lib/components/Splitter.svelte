@@ -36,64 +36,72 @@
 
 <style>
 	.trigger {
-		width: 10px;
+		width: 1px;
+		height: 100%;
 		cursor: ew-resize;
 		position: relative;
-		--width: 3px;
-		--height: 30px;
+		--width: calc(var(--padding) * 2);
 
-		&::before {
+		&:focus-visible {
+			outline: none;
+		}
+
+		&::after {
 			display: block;
 			content: '';
 			position: absolute;
-			inset: 0 50%;
-			transform: translateX(-50%);
 			width: 1px;
-			background-color: rgba(0, 0, 0, 0.1);
+			inset: 0;
+			transform: translateX(-50%);
+			background-color: var(--border-color);
 			transition:
 				background-color 0.2s ease,
 				width 0.2s ease,
 				height 0.2s ease;
 		}
-		&:hover::before {
-			background-color: rgb(15, 87, 159);
-			width: 2px;
+
+		&:before {
+			/* extended grab area */
+			position: absolute;
+			content: '';
+			inset: 0;
+			width: var(--width);
+			transform: translateX(-50%);
 		}
 
-		/* &:after {
-			display: block;
-			content: '';
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: var(--width);
-			height: var(--height);
-			border-radius: 2px;
-			background-color: rgba(0, 0, 0, 0.5);
-		} */
+		&:hover::after,
+		&:focus-visible::after {
+			background-color: var(--highlight-color);
+			width: 2px;
+		}
 
 		&[data-orientation='vertical'] {
 			cursor: ns-resize;
 			width: 100%;
-			height: 10px;
-		}
-
-		/* &[data-orientation='vertical']::after {
-			width: var(--height);
-			height: var(--width);
-		} */
-
-		&[data-orientation='vertical']::before {
 			height: 1px;
-			width: 100%;
-			inset: 50% 0;
-			transform: translateY(-50%);
-		}
-		&[data-orientation='vertical']:hover::before {
-			background-color: rgb(15, 87, 159);
-			width: 100%;
-			height: 2px;
+
+			&:before {
+				position: absolute;
+				content: '';
+				inset: 0;
+				height: var(--width);
+				width: 100%;
+				transform: translateY(-50%);
+			}
+
+			&::after {
+				/* extended grab area */
+				height: 1px;
+				width: 100%;
+				inset: 50% 0;
+				transform: translateY(-50%);
+			}
+
+			&:hover::after,
+			&:focus-visible::after {
+				width: 100%;
+				height: 2px;
+			}
 		}
 	}
 </style>

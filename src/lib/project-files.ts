@@ -77,7 +77,7 @@ export const config: Config = {
 		<title>Stencil Dev Server</title>
 		<script type="module" src="/build/myplayground.esm.js"></script>
 		<script nomodule src="/build/myplayground.js"></script>
-		<style>body { margin: 0; font-family: system-ui; }</style>
+		<style>html {color-scheme: light dark; color: light-dark(#0e0e0e, #f5f5f5);	background-color: light-dark(#fff, #2e3235); } body { margin: 0; font-family: system-ui; }</style>
 	</head>
 	<body>
 		<my-greeting></my-greeting>
@@ -111,7 +111,7 @@ export class MyGreeting {
 							},
 							'my-greeting.css': {
 								file: {
-									contents: `:host { display:block; margin-block-end: 1rem; padding: .5em; }
+									contents: `:host { display:block; margin-block-end: 1rem; }
 div { font-weight: bold; }`
 								}
 							}

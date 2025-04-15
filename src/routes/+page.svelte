@@ -78,7 +78,7 @@
 <style>
 	#controls {
 		padding: 10px;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid var(--border-color);
 		display: flex;
 		gap: 1rem;
 		align-items: end;
@@ -93,8 +93,15 @@
 		gap: 0.5rem;
 	}
 
+	h1 img {
+		@media (prefers-color-scheme: dark) {
+			filter: invert(1);
+		}
+	}
+
 	#preview {
 		height: 100%;
+		padding: var(--padding);
 	}
 
 	#preview-iframe {
@@ -102,10 +109,6 @@
 		width: 100%;
 		height: 100%;
 		border-width: 0;
-	}
-
-	.status {
-		flex-shrink: 1;
 	}
 
 	#actions {

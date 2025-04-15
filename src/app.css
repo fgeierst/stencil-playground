@@ -1,0 +1,30 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+:root {
+	color-scheme: light dark;
+
+	--padding: 4px;
+	--text-color: light-dark(#0e0e0e, #f5f5f5);
+	--background-color: light-dark(#fff, #2e3235);
+	--border-color: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+	--highlight-color: rgb(15, 87, 159);
+}
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body {
+	color: var(--text-color);
+	background-color: var(--background-color);
+	display: flex;
+	flex-direction: column;
+	font-family: system-ui;
+}

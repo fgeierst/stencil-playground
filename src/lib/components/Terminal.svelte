@@ -25,9 +25,8 @@
 	}
 	pre {
 		overflow-y: scroll;
-		background-color: white;
 		font-family: monospace;
-		padding: 1em;
+		padding: var(--padding);
 		white-space: pre-wrap;
 		margin: 0;
 	}

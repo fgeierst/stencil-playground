@@ -20,6 +20,8 @@
 	},
 	"dependencies": {
 		"@codemirror/lang-javascript": "^6.2.3",
+		"@codemirror/state": "^6.5.2",
+		"@fsegurai/codemirror-theme-basic-dark": "^6.1.2",
 		"@webcontainer/api": "^1.5.3",
 		"@zag-js/splitter": "^1.9.3",
 		"@zag-js/svelte": "^1.9.3",
