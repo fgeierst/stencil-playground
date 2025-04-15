@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { FancyAnsi } from 'fancy-ansi';
-
-	const { terminalData } = $props();
+	import { terminalHistory } from '../../stores/terminal-history.svelte';
 
 	let preEl = $state<HTMLPreElement | null>(null);
+
 	const fancyAnsi = new FancyAnsi();
 
 	$effect(() => {
-		if (preEl && terminalData) preEl.scrollTop = preEl.scrollHeight;
+		if (preEl && terminalHistory.data) preEl.scrollTop = preEl.scrollHeight;
 	});
 </script>
 
 <section aria-label="Terminal">
-	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	<pre bind:this={preEl}>{@html fancyAnsi.toHtml(terminalData)}</pre>
+	<pre bind:this={preEl}>
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html fancyAnsi.toHtml(terminalHistory.data)}
+	</pre>
 </section>
 
 <style>

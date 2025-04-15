@@ -1,16 +1,15 @@
 <script lang="ts">
-	import Editor from '../lib/components/Editor.svelte';
-
 	import { onMount } from 'svelte';
 	import StatusBar from '../lib/components/Status.svelte';
 	import Terminal from '../lib/components/Terminal.svelte';
 	import Splitter from '$lib/components/Splitter.svelte';
+	import Editor from '../lib/components/Editor.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainerService } from '$lib/webcontainer';
+	import { terminalHistory } from '../stores/terminal-history.svelte';
 
 	let wc: WebContainerService | null = null;
 	let status = $state('');
-	let terminalData = $state('');
 	let code = $state(
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
@@ -18,13 +17,15 @@
 	let iframeSrc = $state('about:blank');
 
 	onMount(() => {
-		wc = new WebContainerService(
-			projectFiles,
-			handleStatusUpdate,
-			handleReloadPreview,
-			handleTerminalData
-		);
-		wc.initSequence();
+		if (!wc) {
+			wc = new WebContainerService(
+				projectFiles,
+				handleStatusUpdate,
+				handleReloadPreview,
+				handleTerminalData
+			);
+			wc.initSequence();
+		}
 	});
 
 	const handleStatusUpdate = (newStatus: string) => (status = newStatus);
@@ -34,7 +35,7 @@
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
 	};
-	const handleTerminalData = (data: string) => (terminalData += data);
+	const handleTerminalData = (data: string) => (terminalHistory.data += data);
 	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
 	const handleEditEvent = (newCode: string) => (code = newCode);
 </script>
@@ -63,18 +64,16 @@
 				{#snippet first()}
 					<section aria-label="Preview" id="preview">
 						<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
-						<div class="status">
-							<StatusBar {status}></StatusBar>
-						</div>
 					</section>
 				{/snippet}
 				{#snippet second()}
-					<Terminal {terminalData}></Terminal>
+					<Terminal></Terminal>
 				{/snippet}
 			</Splitter>
 		</main>
 	{/snippet}
 </Splitter>
+<StatusBar {status}></StatusBar>
 
 <style>
 	#controls {
@@ -96,8 +95,6 @@
 
 	#preview {
 		height: 100%;
-		display: flex;
-		flex-direction: column;
 	}
 
 	#preview-iframe {

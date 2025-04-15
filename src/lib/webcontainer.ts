@@ -16,19 +16,20 @@ export class WebContainerService {
 	) {}
 
 	public async initSequence(): Promise<void> {
-		if (this.#wc) {
+		if (this.#wc !== null) {
 			this.statusListener('WebContainer already initialized');
 			return;
 		}
 		try {
 			// 1. Boot
 			this.statusListener('Booting WebContainer...');
-			this.terminalListener('Booting WebContainer...\n');
+			this.terminalListener('\nBooting WebContainer...\n');
 			this.#wc = await WebContainer.boot();
 
 			// 2. Setup server-ready listener
 			this.#wc.on('server-ready', async (port: number, url: string) => {
 				this.statusListener(`Server ready on port ${port}.`);
+				this.terminalListener(`Server ready on port ${port}.\n`);
 				await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait, because the stencil dev server is up before the compiled files are written
 				this.reloadListener(url);
 			});
@@ -36,7 +37,7 @@ export class WebContainerService {
 			// 3. Setup error listener
 			this.#wc.on('error', ({ message }) => {
 				this.statusListener(`WebContainer Error: ${message}`);
-				console.error('WebContainer Error:', message);
+				this.terminalListener(`\nWebContainer Error: ${message}\n`);
 			});
 
 			// 4. Mount
@@ -63,6 +64,7 @@ export class WebContainerService {
 			this.statusListener('Ready.');
 		} catch (error) {
 			this.statusListener(`Error initializing WebContainer: ${error}`);
+			this.terminalListener(`\nError initializing WebContainer: ${error}\n`);
 		}
 	}
 

@@ -9,12 +9,12 @@ test('has title', async ({ page }) => {
 test('mounts webcontainer', async ({ page }) => {
 	await page.goto('/');
 
-	const serverReadyMsg = page.getByText('Server ready on port');
+	const terminal = page.getByRole('region', { name: 'Terminal' });
+	const serverReadyMsg = terminal.getByText('Server ready on port');
 	await expect(serverReadyMsg).toBeVisible({
-		timeout: 25 * 1000
+		timeout: 25 * 1000 // time to mount webcomponent
 	});
 
-	const terminal = page.getByRole('region', { name: 'Terminal' });
 	await expect(terminal).toContainText('build finished, watching for changes...');
 
 	const editor = page.getByRole('region', { name: 'Editor' });
@@ -24,6 +24,6 @@ test('mounts webcontainer', async ({ page }) => {
 		.locator('iframe[title="Preview"]')
 		.contentFrame()
 		.locator('my-greeting')
-		.filter({ hasText: 'Hello, WebContainer!' });
+		.filter({ hasText: 'Hello, World!' });
 	await expect(mountedWebComponent).toBeVisible();
 });

@@ -5,12 +5,17 @@
 	let { status }: Props = $props();
 </script>
 
-<div id="status" aria-live="polite">{status}</div>
+<div id="status" aria-live="polite" class="visually-hidden">{status}</div>
 
 <style>
-	div {
-		border-block-start: 1px solid rgba(0, 0, 0, 0.1);
-		padding-block: 0.2rem;
-		height: calc(1.1lh);
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
 	}
 </style>

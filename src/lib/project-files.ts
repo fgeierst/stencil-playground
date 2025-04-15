@@ -70,15 +70,19 @@ export const config: Config = {
 			'index.html': {
 				file: {
 					contents: `<!DOCTYPE html>
-<html dir="ltr" lang="en">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
-  <title>Stencil Dev Server</title>
-  <script type="module" src="/build/myplayground.esm.js"></script>
-  <script nomodule src="/build/myplayground.js"></script>
-  <style> body { padding: 1rem; font-family: system-ui; } </style>
-</head>
-<body><my-greeting name="WebContainer"></my-greeting><my-greeting></my-greeting></body></html>`
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Stencil Dev Server</title>
+		<script type="module" src="/build/myplayground.esm.js"></script>
+		<script nomodule src="/build/myplayground.js"></script>
+		<style>body { margin: 0; font-family: system-ui; }</style>
+	</head>
+	<body>
+		<my-greeting></my-greeting>
+	</body>
+</html>`
 				}
 			},
 			'index.ts': {
@@ -107,7 +111,7 @@ export class MyGreeting {
 							},
 							'my-greeting.css': {
 								file: {
-									contents: `:host { display: block; border: 2px dashed green; margin-block-end: 1rem; padding: .5em; color: #111; background-color: #efe; }
+									contents: `:host { display:block; margin-block-end: 1rem; padding: .5em; }
 div { font-weight: bold; }`
 								}
 							}
