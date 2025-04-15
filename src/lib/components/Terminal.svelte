@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FancyAnsi } from 'fancy-ansi';
-	import { terminalHistory } from '../../stores/terminal-history.svelte';
+	import { terminalHistory } from './terminal-history.svelte';
 
 	let preEl = $state<HTMLPreElement | null>(null);
 

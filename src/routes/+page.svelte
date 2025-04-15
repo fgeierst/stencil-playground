@@ -6,7 +6,7 @@
 	import Editor from '../lib/components/Editor.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainerService } from '$lib/webcontainer';
-	import { terminalHistory } from '../stores/terminal-history.svelte';
+	import { terminalHistory } from '../lib/components/terminal-history.svelte';
 
 	let wc: WebContainerService | null = null;
 	let status = $state('');

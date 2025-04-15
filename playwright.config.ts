@@ -9,5 +9,6 @@ export default defineConfig({
 		command: 'pnpm build && pnpm preview',
 		port: 4173
 	},
-	testDir: 'tests'
+	testDir: 'src',
+	testMatch: /.*\.test\.(ts|js)/
 });
