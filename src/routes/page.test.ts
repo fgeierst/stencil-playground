@@ -26,3 +26,27 @@ test('mounts webcontainer', async ({ page }) => {
 		.filter({ hasText: 'Hello, World!' });
 	await expect(mountedWebComponent).toBeVisible();
 });
+
+test('make a code change and update the preview', async ({ page }) => {
+	await page.goto('/');
+
+	const ready = page.getByRole('region', { name: 'Terminal' }).getByText('Server ready');
+	await expect(ready).toBeVisible({ timeout: 25 * 1000 });
+
+	const editor = page.getByRole('region', { name: 'Editor' });
+	const textbox = editor.getByRole('textbox');
+	await textbox.fill('');
+	await textbox.fill(`import { Component, h } from '@stencil/core';
+@Component({ tag: 'my-greeting', shadow: true })
+export class MyGreeting {
+  render() { return (<div>Hola!</div>); }
+}`);
+	const saveButton = page.getByRole('button', { name: 'Save' });
+	await saveButton.click();
+	const mountedWebComponent = page
+		.locator('iframe[title="Preview"]')
+		.contentFrame()
+		.locator('my-greeting')
+		.filter({ hasText: 'Hola!' });
+	await expect(mountedWebComponent).toBeVisible();
+});
