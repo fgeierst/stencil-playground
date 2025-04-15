@@ -9,18 +9,14 @@
 	let editor: EditorView | null = null;
 	const editorTheme = new Compartment();
 
-	let isDarkMode = $state(true);
-
 	function updateDarkModePreference(event: { matches: boolean }) {
-		isDarkMode = event.matches;
 		editor?.dispatch({
-			effects: editorTheme.reconfigure(isDarkMode ? basicDark : [])
+			effects: editorTheme.reconfigure(event.matches ? basicDark : [])
 		});
 	}
 
 	onMount(() => {
 		const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-		isDarkMode = darkModeMediaQuery.matches;
 		darkModeMediaQuery.addEventListener('change', updateDarkModePreference);
 
 		editor = new EditorView({
@@ -37,13 +33,14 @@
 						editEvent(editor?.state.doc.toString());
 					}
 				}),
-				editorTheme.of(isDarkMode ? basicDark : [])
+				editorTheme.of(darkModeMediaQuery.matches ? basicDark : [])
 			],
 			parent: document.querySelector('#editor')!
 		});
 
 		return () => {
 			editor?.destroy();
+			darkModeMediaQuery.removeEventListener('change', updateDarkModePreference);
 		};
 	});
 </script>
