@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as tabs from '@zag-js/tabs';
-	import { useMachine, normalizeProps } from '@zag-js/svelte';
+	import { useMachine } from '@zag-js/svelte';
 
 	const data = [
 		{ value: 'item-1', label: 'Item one', content: 'Item one content' },

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Preview from '../lib/components/Preview.svelte';
+
 	import { onMount } from 'svelte';
 	import StatusBar from '../lib/components/Status.svelte';
 	import Terminal from '../lib/components/Terminal.svelte';
@@ -14,7 +16,7 @@
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
 	);
-	let resultCompiledJs = $state('');
+	let compiledJs = $state('');
 	let iframeSrc = $state('about:blank');
 
 	onMount(() => {
@@ -37,7 +39,6 @@
 	});
 
 	const handleKeyup = (e: KeyboardEvent) => {
-		console.log(e.key);
 		if (e.key === 'r' && e.ctrlKey) {
 			e.preventDefault();
 			handleReloadPreview();
@@ -54,7 +55,7 @@
 		const nextUrl = new URL(url || iframeSrc);
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
-		resultCompiledJs = (await wc?.readFile('./www/build/my-greeting.entry.js', 'utf-8')) as string;
+		compiledJs = (await wc?.readFile('./www/build/my-greeting.entry.js', 'utf-8')) as string;
 	};
 	const handleTerminalData = (data: string) => (terminalHistory.data += data);
 	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
@@ -69,10 +70,6 @@
 		a.click();
 		URL.revokeObjectURL(url);
 	};
-
-	const handleGetCompiledJavaScript = async () => {
-		console.log('compiled js', result);
-	};
 </script>
 
 <svelte:head>
@@ -86,9 +83,6 @@
 	</h1>
 	<div id="actions">
 		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
-		<button type="button" id="reload-button" onclick={handleGetCompiledJavaScript}>
-			Get compiled JS
-		</button>
 	</div>
 </div>
 <Splitter>
@@ -99,9 +93,7 @@
 		<main>
 			<Splitter orientation="vertical" defaultSize={[80, 20]} collapsibleName="Terminal">
 				{#snippet first()}
-					<section aria-label="Preview" id="preview">
-						<iframe id="preview-iframe" src={iframeSrc} title="Preview"></iframe>
-					</section>
+					<Preview {iframeSrc} {compiledJs}></Preview>
 				{/snippet}
 				{#snippet second()}
 					<Terminal></Terminal>
