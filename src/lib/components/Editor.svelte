@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { EditorView, basicSetup } from 'codemirror';
-	import { Compartment } from '@codemirror/state';
+	import { Compartment, EditorState } from '@codemirror/state';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { basicDark } from '@fsegurai/codemirror-theme-basic-dark';
 	import { onMount } from 'svelte';
 
-	let { code, editEvent } = $props();
+	type Props = {
+		code: string;
+		editEvent: (newCode: string | undefined) => void;
+		readonly?: boolean;
+	};
+	let { code, editEvent, readonly = false }: Props = $props();
+	const id = $props.id();
+
 	let editor: EditorView | null = null;
 	const editorTheme = new Compartment();
 
@@ -33,9 +40,10 @@
 						editEvent(editor?.state.doc.toString());
 					}
 				}),
-				editorTheme.of(darkModeMediaQuery.matches ? basicDark : [])
+				editorTheme.of(darkModeMediaQuery.matches ? basicDark : []),
+				EditorState.readOnly.of(readonly)
 			],
-			parent: document.querySelector('#editor')!
+			parent: document.querySelector(`#editor-${id}`)!
 		});
 
 		return () => {
@@ -46,7 +54,7 @@
 </script>
 
 <section aria-label="Editor">
-	<div id="editor"></div>
+	<div id={`editor-${id}`}></div>
 </section>
 
 <style>

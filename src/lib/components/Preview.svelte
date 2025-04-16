@@ -2,13 +2,14 @@
 	import { normalizeProps, useMachine } from '@zag-js/svelte';
 	import * as tabs from '@zag-js/tabs';
 	import { onMount } from 'svelte';
+	import Editor from './Editor.svelte';
 
 	const { iframeSrc, compiledJs } = $props();
 
 	const id = $props.id();
 	const service = useMachine(tabs.machine, {
 		id,
-		defaultValue: 'item-1'
+		defaultValue: 'result'
 	});
 
 	const api = $derived(tabs.connect(service, normalizeProps));
@@ -17,19 +18,15 @@
 
 <section aria-label="Preview">
 	<div {...api.getRootProps()}>
-		<div {...api.getListProps()}>
+		<div {...api.getListProps()} class="triggers">
 			<button {...api.getTriggerProps({ value: 'result' })}>Result</button>
-			<button {...api.getTriggerProps({ value: 'js' })}>JavaScript</button>
+			<button {...api.getTriggerProps({ value: 'js' })}>Javascript</button>
 		</div>
 		<div {...api.getContentProps({ value: 'result' })}>
 			<iframe src={iframeSrc} title="Preview"></iframe>
 		</div>
 		<div {...api.getContentProps({ value: 'js' })}>
-			<pre>
-				<code>
-					{compiledJs}
-				</code>
-			</pre>
+			<Editor code={compiledJs} editEvent={(e) => console.log(e)} readonly={true}></Editor>
 		</div>
 	</div>
 </section>
@@ -38,6 +35,10 @@
 	section {
 		height: 100%;
 		padding: var(--padding);
+	}
+
+	.triggers {
+		margin-block-end: calc(var(--padding) * 2);
 	}
 
 	iframe {

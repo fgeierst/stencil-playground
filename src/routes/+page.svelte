@@ -58,7 +58,11 @@
 		compiledJs = (await wc?.readFile('./www/build/my-greeting.entry.js', 'utf-8')) as string;
 	};
 	const handleTerminalData = (data: string) => (terminalHistory.data += data);
-	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
+	const handleSave = async () => {
+		await wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
+		await new Promise((resolve) => setTimeout(resolve, 500));
+		await handleReloadPreview();
+	};
 	const handleEditEvent = (newCode: string) => (code = newCode);
 	const handleDownloadLockfile = async () => {
 		const file = (await wc?.readFile('./pnpm-lock.yaml')) as Uint8Array;

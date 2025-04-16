@@ -55,7 +55,9 @@
 					>{collapsibleName}</button
 				>
 			{/if}
-			{@render second()}
+			{#if !api.isPanelCollapsed('b')}
+				{@render second()}
+			{/if}
 		</div>
 	</div>
 </div>
