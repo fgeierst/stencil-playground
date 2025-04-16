@@ -26,7 +26,26 @@
 			);
 			wc.initSequence();
 		}
+
+		document.addEventListener('keyup', handleKeyup);
+
+		return () => {
+			document.removeEventListener('keyup', handleKeyup);
+			wc?.teardown();
+		};
 	});
+
+	const handleKeyup = (e: KeyboardEvent) => {
+		console.log(e.key);
+		if (e.key === 'r' && e.ctrlKey) {
+			e.preventDefault();
+			handleReloadPreview();
+		}
+		if (e.key === 'l' && e.ctrlKey) {
+			e.preventDefault();
+			handleDownloadLockfile();
+		}
+	};
 
 	const handleStatusUpdate = (newStatus: string) => (status = newStatus);
 	const handleReloadPreview = async (url: string = '') => {
@@ -38,6 +57,16 @@
 	const handleTerminalData = (data: string) => (terminalHistory.data += data);
 	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
 	const handleEditEvent = (newCode: string) => (code = newCode);
+	const handleDownloadLockfile = async () => {
+		const file = (await wc?.readFile('./pnpm-lock.yaml')) as Uint8Array;
+		const blob = new Blob([file], { type: 'text/yaml' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'pnpm-lock.yaml';
+		a.click();
+		URL.revokeObjectURL(url);
+	};
 </script>
 
 <svelte:head>
@@ -51,7 +80,6 @@
 	</h1>
 	<div id="actions">
 		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
-		<button id="reload-button" onclick={() => handleReloadPreview()}>Reload</button>
 	</div>
 </div>
 <Splitter>
@@ -120,5 +148,6 @@
 
 	main {
 		height: 100%;
+		width: 100%;
 	}
 </style>

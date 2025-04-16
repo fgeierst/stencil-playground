@@ -21,6 +21,8 @@ export class WebContainerService {
 			return;
 		}
 		try {
+			const startTime = performance.now();
+
 			// 1. Boot
 			this.statusListener('Booting WebContainer...');
 			this.terminalListener('\nBooting WebContainer...\n');
@@ -28,8 +30,10 @@ export class WebContainerService {
 
 			// 2. Setup server-ready listener
 			this.#wc.on('server-ready', async (port: number, url: string) => {
-				this.statusListener(`Server ready on port ${port}.`);
-				this.terminalListener(`Server ready on port ${port}.\n`);
+				const endTime = performance.now();
+				const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+				this.statusListener(`Server ready on port ${port}`);
+				this.terminalListener(`Server ready on port ${port} (${timeTaken}s).\n`);
 				await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait, because the stencil dev server is up before the compiled files are written
 				this.reloadListener(url);
 			});
@@ -56,12 +60,11 @@ export class WebContainerService {
 
 			// 6. Start dev server
 			this.statusListener('Starting dev server...');
+			this.terminalListener('pnpm start\n');
 			const startExitCode = await this.exec('pnpm', ['start', '--', '--no-open']);
 			if (startExitCode !== 0) {
 				throw new Error(`Dev server failed with exit code ${startExitCode}`);
 			}
-
-			this.statusListener('Ready.');
 		} catch (error) {
 			this.statusListener(`Error initializing WebContainer: ${error}`);
 			this.terminalListener(`\nError initializing WebContainer: ${error}\n`);
@@ -85,6 +88,15 @@ export class WebContainerService {
 		return process.exit;
 	}
 
+	public async teardown(): Promise<void> {
+		if (!this.#wc) {
+			throw new Error('WebContainer not initialized');
+		}
+		this.#wc.teardown();
+		this.statusListener('WebContainer stopped');
+		this.terminalListener('\nWebContainer stopped\n');
+	}
+
 	public async updateFile(path: string, data: string): Promise<void> {
 		if (!this.#wc) {
 			throw new Error('WebContainer not initialized');
@@ -92,5 +104,12 @@ export class WebContainerService {
 		await this.#wc.fs.writeFile(path, data);
 		this.statusListener(`Updated file: ${path}`);
 		this.reloadListener();
+	}
+
+	public async readFile(path: string): Promise<Uint8Array<ArrayBufferLike>> {
+		if (!this.#wc) {
+			throw new Error('WebContainer not initialized');
+		}
+		return await this.#wc.fs.readFile(path);
 	}
 }

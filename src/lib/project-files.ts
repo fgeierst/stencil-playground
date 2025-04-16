@@ -22,6 +22,30 @@ export const projectFiles: FileSystemTree = {
 			)
 		}
 	},
+	'pnpm-lock.yaml': {
+		file: {
+			contents: `lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@stencil/core':
+    specifier: 4.25.0
+    version: 4.25.0
+
+packages:
+
+  /@stencil/core@4.25.0:
+    resolution: {integrity: sha512-mLyaGCCGaHh6M4n1Hs3CXytD8MLQEt/eBBEoeJvAKE82S3CaqT5n5STXNHnv+qRz3btaSzqEfn2DBTurHYgKeQ==}
+    engines: {node: '>=16.0.0', npm: '>=7.10.0'}
+    hasBin: true
+    dev: false
+`
+		}
+	},
+
 	'stencil.config.ts': {
 		file: {
 			contents: `import { Config } from '@stencil/core';
