@@ -25,6 +25,7 @@
 		"@webcontainer/api": "^1.5.3",
 		"@zag-js/splitter": "^1.9.3",
 		"@zag-js/svelte": "^1.9.3",
+		"@zag-js/tabs": "^1.10.0",
 		"codemirror": "^6.0.1",
 		"fancy-ansi": "^0.1.3"
 	},

@@ -106,10 +106,17 @@ export class WebContainerService {
 		this.reloadListener();
 	}
 
-	public async readFile(path: string): Promise<Uint8Array<ArrayBufferLike>> {
+	public async readFile(
+		path: string,
+		encoding: 'utf-8' | null = null
+	): Promise<string | Uint8Array> {
 		if (!this.#wc) {
 			throw new Error('WebContainer not initialized');
 		}
-		return await this.#wc.fs.readFile(path);
+		if (encoding === null) {
+			return await this.#wc.fs.readFile(path);
+		} else {
+			return await this.#wc.fs.readFile(path, encoding);
+		}
 	}
 }

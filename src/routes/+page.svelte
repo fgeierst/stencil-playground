@@ -14,6 +14,7 @@
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
 	);
+	let resultCompiledJs = $state('');
 	let iframeSrc = $state('about:blank');
 
 	onMount(() => {
@@ -53,6 +54,7 @@
 		const nextUrl = new URL(url || iframeSrc);
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
+		resultCompiledJs = (await wc?.readFile('./www/build/my-greeting.entry.js', 'utf-8')) as string;
 	};
 	const handleTerminalData = (data: string) => (terminalHistory.data += data);
 	const handleSave = () => wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
@@ -67,6 +69,10 @@
 		a.click();
 		URL.revokeObjectURL(url);
 	};
+
+	const handleGetCompiledJavaScript = async () => {
+		console.log('compiled js', result);
+	};
 </script>
 
 <svelte:head>
@@ -80,6 +86,9 @@
 	</h1>
 	<div id="actions">
 		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
+		<button type="button" id="reload-button" onclick={handleGetCompiledJavaScript}>
+			Get compiled JS
+		</button>
 	</div>
 </div>
 <Splitter>
