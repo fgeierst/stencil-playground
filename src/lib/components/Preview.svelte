@@ -26,7 +26,7 @@
 			<iframe src={iframeSrc} title="Preview"></iframe>
 		</div>
 		<div {...api.getContentProps({ value: 'js' })}>
-			<Editor code={compiledJs} editEvent={(e) => console.log(e)} readonly={true}></Editor>
+			<Editor code={compiledJs} readonly={true}></Editor>
 		</div>
 	</div>
 </section>

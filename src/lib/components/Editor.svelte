@@ -7,7 +7,7 @@
 
 	type Props = {
 		code: string;
-		editEvent: (newCode: string) => void;
+		editEvent?: (newCode: string) => void;
 		readonly?: boolean;
 	};
 	let { code, editEvent, readonly = false }: Props = $props();
@@ -46,7 +46,7 @@
 				EditorView.updateListener.of((update) => {
 					if (update.docChanged) {
 						const newCode = editor?.state.doc.toString();
-						if (newCode) editEvent(newCode);
+						if (newCode && editEvent) editEvent(newCode);
 					}
 				}),
 				editorTheme.of(darkModeMediaQuery.matches ? basicDark : []),

@@ -56,7 +56,6 @@
 	};
 
 	const handleReloadPreview = async (url: string = '') => {
-		console.log('handleReloadPreview, url:', url);
 		const nextUrl = new URL(url || iframeSrc);
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
