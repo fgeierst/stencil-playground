@@ -126,10 +126,22 @@ export const config: Config = {
 							'my-greeting.tsx': {
 								file: {
 									contents: `import { Component, Prop, h } from '@stencil/core';
-@Component({ tag: 'my-greeting', styleUrl: 'my-greeting.css', shadow: true })
+
+@Component({
+  tag: 'my-greeting',
+	styleUrl: 'my-greeting.css',
+	shadow: true
+})
+	
 export class MyGreeting {
   @Prop() name: string = 'World';
-  render() { return (<div>Hello, {this.name}!</div>); }
+  render() {
+	  return (
+		<div>
+		  Hello, {this.name}!
+		</div>
+	  );
+  }
 }`
 								}
 							},

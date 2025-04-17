@@ -17,9 +17,11 @@
 	const editorTheme = new Compartment();
 
 	$effect(() => {
-		editor?.dispatch({
-			changes: { from: 0, to: editor.state.doc.length, insert: code }
-		});
+		if (code) {
+			editor?.dispatch({
+				changes: { from: 0, to: editor.state.doc.length, insert: code }
+			});
+		}
 	});
 
 	function updateDarkModePreference(event: { matches: boolean }) {
