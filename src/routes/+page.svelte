@@ -15,7 +15,10 @@
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
 	);
-	let editedCode = $state('');
+	let editedCode = $state(
+		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
+			.contents
+	);
 	let compiledJs = $state('');
 	let iframeSrc = $state('about:blank');
 
@@ -25,7 +28,8 @@
 				projectFiles,
 				handleStatusUpdate,
 				handleReloadPreview,
-				handleTerminalData
+				handleTerminalData,
+				handleBuildFinished
 			);
 			wc.initSequence();
 		}
@@ -51,14 +55,16 @@
 
 	const handleSave = async () => {
 		await wc?.updateFile('src/components/my-greeting/my-greeting.tsx', editedCode);
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		handleReloadPreview();
 	};
 
 	const handleReloadPreview = async (url: string = '') => {
 		const nextUrl = new URL(url || iframeSrc);
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
+	};
+
+	const handleBuildFinished = async () => {
+		handleReloadPreview();
 		const newCompiledJs = (await wc?.readFile(
 			'./www/build/my-greeting.entry.js',
 			'utf-8'
@@ -91,7 +97,7 @@
 		StencilJS Playground
 	</h1>
 	<div id="actions">
-		<button onclick={handleSave}>Save</button>
+		<button onclick={handleSave} disabled={code === editedCode}>Save</button>
 	</div>
 </div>
 <Splitter>

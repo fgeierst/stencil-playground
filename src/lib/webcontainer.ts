@@ -4,6 +4,7 @@ type WebContainerInstance = WebContainer | null;
 type StatusListener = (status: string) => void;
 type ReloadListener = (url?: string) => void;
 type TerminalListener = (data: string) => void;
+type BuildFinishedListener = () => void;
 
 export class WebContainerService {
 	#wc: WebContainerInstance = null;
@@ -12,7 +13,8 @@ export class WebContainerService {
 		private readonly files: FileSystemTree,
 		private readonly statusListener: StatusListener,
 		private readonly reloadListener: ReloadListener,
-		private readonly terminalListener: TerminalListener
+		private readonly terminalListener: TerminalListener,
+		private readonly buildFinishedListener: BuildFinishedListener
 	) {}
 
 	public async initSequence(): Promise<void> {
@@ -81,6 +83,9 @@ export class WebContainerService {
 			new WritableStream({
 				write: (data) => {
 					this.terminalListener(data);
+					if (data.includes('build finished')) {
+						this.buildFinishedListener();
+					}
 				}
 			})
 		);
