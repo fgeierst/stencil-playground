@@ -21,10 +21,16 @@
 <style>
 	section {
 		flex-grow: 1;
-		overflow-y: auto;
 		display: grid;
+		width: 100%;
+		overflow-y: auto;
 	}
 	pre {
+		font-family: monospace;
+		padding: var(--padding);
+		white-space: pre-wrap;
+		margin: 0;
+
 		--ansi-dim-opacity: 1;
 
 		--ansi-black: light-dark(#333333, #1e1e1e);
@@ -43,11 +49,5 @@
 		--ansi-bright-magenta: light-dark(#8f3c8c, #e0a0e0);
 		--ansi-bright-cyan: light-dark(#1e776a, #79e8d2);
 		--ansi-bright-white: light-dark(#555555, #ffffff);
-
-		overflow-y: scroll;
-		font-family: monospace;
-		padding: var(--padding);
-		white-space: pre-wrap;
-		margin: 0;
 	}
 </style>

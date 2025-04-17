@@ -1,11 +1,10 @@
 <script lang="ts">
-	import Preview from '../lib/components/Preview.svelte';
-
 	import { onMount } from 'svelte';
 	import StatusBar from '../lib/components/Status.svelte';
 	import Terminal from '../lib/components/Terminal.svelte';
 	import Splitter from '$lib/components/Splitter.svelte';
 	import Editor from '../lib/components/Editor.svelte';
+	import Preview from '../lib/components/Preview.svelte';
 	import { projectFiles } from '$lib/project-files';
 	import { WebContainerService } from '$lib/webcontainer';
 	import { terminalHistory } from '../lib/components/terminal-history.svelte';
@@ -16,6 +15,7 @@
 		projectFiles.src.directory.components.directory['my-greeting'].directory['my-greeting.tsx'].file
 			.contents
 	);
+	let editedCode = $state('');
 	let compiledJs = $state('');
 	let iframeSrc = $state('about:blank');
 
@@ -49,21 +49,27 @@
 		}
 	};
 
-	const handleStatusUpdate = (newStatus: string) => (status = newStatus);
+	const handleSave = async () => {
+		await wc?.updateFile('src/components/my-greeting/my-greeting.tsx', editedCode);
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		handleReloadPreview();
+	};
+
 	const handleReloadPreview = async (url: string = '') => {
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		console.log('handleReloadPreview, url:', url);
 		const nextUrl = new URL(url || iframeSrc);
 		nextUrl.searchParams.set('t', Date.now().toString());
 		iframeSrc = nextUrl.toString();
-		compiledJs = (await wc?.readFile('./www/build/my-greeting.entry.js', 'utf-8')) as string;
+		const newCompiledJs = (await wc?.readFile(
+			'./www/build/my-greeting.entry.js',
+			'utf-8'
+		)) as string;
+		compiledJs = newCompiledJs;
 	};
+
+	const handleEditEvent = (newCode: string) => (editedCode = newCode);
+	const handleStatusUpdate = (newStatus: string) => (status = newStatus);
 	const handleTerminalData = (data: string) => (terminalHistory.data += data);
-	const handleSave = async () => {
-		await wc?.updateFile('src/components/my-greeting/my-greeting.tsx', code);
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		await handleReloadPreview();
-	};
-	const handleEditEvent = (newCode: string) => (code = newCode);
 	const handleDownloadLockfile = async () => {
 		const file = (await wc?.readFile('./pnpm-lock.yaml')) as Uint8Array;
 		const blob = new Blob([file], { type: 'text/yaml' });
@@ -86,7 +92,7 @@
 		StencilJS Playground
 	</h1>
 	<div id="actions">
-		<button type="submit" id="save-button" onclick={handleSave}>Save</button>
+		<button onclick={handleSave}>Save</button>
 	</div>
 </div>
 <Splitter>
@@ -130,18 +136,6 @@
 		@media (prefers-color-scheme: dark) {
 			filter: invert(1);
 		}
-	}
-
-	#preview {
-		height: 100%;
-		padding: var(--padding);
-	}
-
-	#preview-iframe {
-		flex-grow: 1;
-		width: 100%;
-		height: 100%;
-		border-width: 0;
 	}
 
 	#actions {

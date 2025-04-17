@@ -7,7 +7,20 @@
 		args: {
 			defaultSize: [50, 50],
 			orientation: 'horizontal',
-			collapsibleName: undefined
+			collapsibleName: 'Hello'
+		},
+		argTypes: {
+			orientation: {
+				control: {
+					type: 'select',
+					options: ['horizontal', 'vertical']
+				}
+			},
+			collapsibleName: {
+				control: {
+					type: 'text'
+				}
+			}
 		}
 	});
 </script>

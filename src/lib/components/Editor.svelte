@@ -7,7 +7,7 @@
 
 	type Props = {
 		code: string;
-		editEvent: (newCode: string | undefined) => void;
+		editEvent: (newCode: string) => void;
 		readonly?: boolean;
 	};
 	let { code, editEvent, readonly = false }: Props = $props();
@@ -15,6 +15,12 @@
 
 	let editor: EditorView | null = null;
 	const editorTheme = new Compartment();
+
+	$effect(() => {
+		editor?.dispatch({
+			changes: { from: 0, to: editor.state.doc.length, insert: code }
+		});
+	});
 
 	function updateDarkModePreference(event: { matches: boolean }) {
 		editor?.dispatch({
@@ -37,7 +43,8 @@
 				EditorView.lineWrapping,
 				EditorView.updateListener.of((update) => {
 					if (update.docChanged) {
-						editEvent(editor?.state.doc.toString());
+						const newCode = editor?.state.doc.toString();
+						if (newCode) editEvent(newCode);
 					}
 				}),
 				editorTheme.of(darkModeMediaQuery.matches ? basicDark : []),

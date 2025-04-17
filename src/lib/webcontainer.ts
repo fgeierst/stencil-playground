@@ -116,7 +116,8 @@ export class WebContainerService {
 		if (encoding === null) {
 			return await this.#wc.fs.readFile(path);
 		} else {
-			return await this.#wc.fs.readFile(path, encoding);
+			const result = await this.#wc.fs.readFile(path, encoding);
+			return result;
 		}
 	}
 }
